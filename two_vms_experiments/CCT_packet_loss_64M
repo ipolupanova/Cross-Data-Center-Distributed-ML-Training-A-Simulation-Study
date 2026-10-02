@@ -1,0 +1,33 @@
+#!/bin/bash
+
+LOSSES=(0 0.25 0.5 0.75 1)
+RESULTS_FILE="./results/$(basename "${BASH_SOURCE[0]}").csv"
+
+trap 'tc qdisc del dev eth0 root 2>/dev/null; true' EXIT INT TERM
+tc qdisc del dev eth0 root 2>/dev/null; true
+
+echo "loss_pct,time_us" > $RESULTS_FILE
+
+for loss in "${LOSSES[@]}"; do
+    echo "Running with packet loss ${loss}%"
+
+    if [ "$loss" != "0" ]; then
+        tc qdisc add dev eth0 root netem loss ${loss}%
+    fi
+
+    TIME=$(mpirun --allow-run-as-root -np 2 \
+      -H 65.108.32.131:1,65.108.32.146:1 \
+      --mca btl_tcp_if_include eth0 \
+      --mca oob_tcp_if_include eth0 \
+      /root/nccl-tests/build/all_reduce_perf -b 64M -e 64M -f 2 2>/dev/null \
+      | grep "67108864" | grep -v "^#" | awk '{print $6}')
+
+    echo "${loss},${TIME}" >> $RESULTS_FILE
+    echo "Loss ${loss}% -> time ${TIME}us"
+
+    if [ "$loss" != "0" ]; then
+        tc qdisc del dev eth0 root
+    fi
+done
+
+echo "Results saved to $RESULTS_FILE"

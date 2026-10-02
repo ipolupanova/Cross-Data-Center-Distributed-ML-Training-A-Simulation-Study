@@ -1,0 +1,46 @@
+/root/venv/lib/python3.14/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+/root/venv/lib/python3.14/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+started main
+rank 0: 2519 cycles/μs | F sleep 4.400 ms (target 4.704) | B sleep 3.745 ms (target 4.003) | W sleep 3.066 ms (target 3.275)
+============================================================
+Synthetic ZB-H1 Pipeline Kernel  (p=2, m=4)
+============================================================
+  micro_batch_size  : 16
+  sequence_length   : 512
+  hidden_size       : 768
+  dtype             : torch.bfloat16
+  n_steps           : 10
+  pp_stages (p)     : 2
+  microbatches (m)  : 4
+  activation size   : 12.0 MB per transfer
+  forward_us        : 4,703.5 μs  (4.7 ms)
+  b_us              : 4,003.0 μs  (4.0 ms)  input grad
+  w_us              : 3,275.25 μs  (3.3 ms)  weight grad
+  bubble_fraction   : 11.3%  (p-1)(F+B-W) / m(F+B+W)
+  transfers/step    : 8  (4 mb × fwd + bwd) × 12 MB
+============================================================
+rank 0: warming up
+NCCL version 2.30.7+cuda13.3
+/root/venv/lib/python3.14/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+rank 0: warmup done
+  step   5/10 | iter time: 2508.6 ms
+  step  10/10 | iter time: 4053.9 ms
+
+============================================================
+Results — ZB-H1 (p=2, m=4)
+============================================================
+  avg iter time     : 2840.0 ms
+  min iter time     : 2062.2 ms
+  max iter time     : 4053.9 ms
+  total wall time   : 28.4 s  (0.5 min)
+
+Breakdown (rank 0):
+  ideal compute     : 47.9 ms  (m × F + B + W, no idle)
+  bubble            : 5.4 ms  = 0.2% of wall time
+  bubble formula    : (p-1)(F+B-W) = 5.4 ms = 11.3% of ideal
+  bubble_ratio      : 0.9831
+  communication     : 2786.7 ms  (8 × 12 MB NCCL)
+============================================================

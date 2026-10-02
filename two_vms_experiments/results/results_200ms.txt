@@ -1,0 +1,18 @@
+# nccl-tests version 2.18.5 nccl-headers=22903 nccl-library=22903
+# Collective test starting: all_reduce_perf
+# nThread 1 nGpus 1 minBytes 33554432 maxBytes 33554432 step: 2(factor) warmup iters: 1 iters: 20 agg iters: 1 validation: 1 graph: 0 unalign: 0
+#
+# Using devices
+#  Rank  0 Group  0 Pid 1350999 on hard-home-spreads-fin-01 device  0 [0000:05:00] Tesla V100-SXM2-16GB
+#  Rank  1 Group  0 Pid 1298726 on sharp-earth-echoes-fin-01 device  0 [0000:05:00] Tesla V100-SXM2-16GB
+#
+#                                                              out-of-place                       in-place          
+#       size         count      type   redop    root     time   algbw   busbw  #wrong     time   algbw   busbw  #wrong 
+#        (B)    (elements)                               (us)  (GB/s)  (GB/s)             (us)  (GB/s)  (GB/s)         
+    33554432       8388608     float     sum      -1  4791206    0.01    0.01       0  5879607    0.01    0.01       0
+# Out of bounds values : 0 OK
+# Avg bus bandwidth    : 0.00635513 
+#
+# Collective test concluded: all_reduce_perf
+#
+

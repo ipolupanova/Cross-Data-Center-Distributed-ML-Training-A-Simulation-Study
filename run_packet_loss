@@ -1,0 +1,3 @@
+#!/bin/bash
+# all four schedules under packet loss 0-1 %, back-to-back per value; results in results/run_<schedule>_packet_loss.csv
+exec bash "$(dirname "${BASH_SOURCE[0]}")/run_experiment.sh" packet_loss "$@"

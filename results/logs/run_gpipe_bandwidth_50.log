@@ -1,0 +1,47 @@
+/root/venv/lib/python3.14/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+/root/venv/lib/python3.14/site-packages/torch/_subclasses/functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+started main
+rank 0: 2699 cycles/μs | fwd sleep 4.710 ms (target 4.704) | bwd sleep 7.286 ms (target 7.278)
+============================================================
+Synthetic GPipe Pipeline Kernel  (p=2, m=4)
+============================================================
+  micro_batch_size  : 16
+  sequence_length   : 512
+  hidden_size       : 768
+  dtype             : torch.bfloat16
+  n_steps           : 10
+  pp_stages (p)     : 2
+  microbatches (m)  : 4
+  activation size   : 12.0 MB per transfer
+  forward_us        : 4,703.5 μs  (4.7 ms)
+  backward_us       : 7,278.25 μs  (7.3 ms)
+  bubble_fraction   : 25.0%  (p-1)/m = (2-1)/4
+  transfers/step    : 8  (4 mb × fwd + bwd) × 12 MB
+============================================================
+rank 0: warming up
+[rank0]:[W930 19:09:23.408461759 ProcessGroupNCCL.cpp:4207] Warning: An unbatched P2P op (send/recv) was called on this ProcessGroup with size 2.  In lazy initialization mode, this will result in a new 2-rank NCCL communicator to be created. (function operator())
+NCCL version 2.30.7+cuda13.3
+[rank0]:[W930 19:09:23.624944425 ProcessGroupNCCL.cpp:4207] Warning: An unbatched P2P op (send/recv) was called on this ProcessGroup with size 2.  In lazy initialization mode, this will result in a new 2-rank NCCL communicator to be created. (function operator())
+/root/venv/lib/python3.14/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+rank 0: warmup done
+  step   5/10 | iter time: 9567.0 ms
+  step  10/10 | iter time: 9450.1 ms
+
+============================================================
+Results — GPipe (p=2, m=4)
+============================================================
+  avg iter time     : 9337.5 ms
+  min iter time     : 9181.5 ms
+  max iter time     : 9567.0 ms
+  total wall time   : 93.4 s  (1.6 min)
+
+Breakdown (rank 0):
+  ideal compute     : 47.9 ms  (m × fwd + bwd, no idle)
+  bubble            : 12.0 ms  = 0.1% of wall time
+  bubble formula    : (p-1)/m = (2-1)/4 = 25.0%
+  bubble_ratio      : 0.9949
+  communication     : 9277.6 ms  (8 × 12 MB NCCL)
+============================================================

@@ -1,0 +1,3 @@
+#!/bin/bash
+# all four schedules under bandwidth 50-1000 Mbit, back-to-back per value; results in results/run_<schedule>_bandwidth.csv
+exec bash "$(dirname "${BASH_SOURCE[0]}")/run_experiment.sh" bandwidth "$@"

@@ -1,0 +1,3 @@
+#!/bin/bash
+# all four schedules under jitter 0-6 ms on a 10 ms base delay, back-to-back per value; results in results/run_<schedule>_jitter.csv
+exec bash "$(dirname "${BASH_SOURCE[0]}")/run_experiment.sh" jitter "$@"

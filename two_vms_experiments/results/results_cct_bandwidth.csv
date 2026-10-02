@@ -1,0 +1,11 @@
+bandwidth_gbps,time_us
+1,minBytes
+281474
+5,minBytes
+276318
+10,minBytes
+275900
+50,minBytes
+276247
+100,minBytes
+276295
